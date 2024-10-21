@@ -1,6 +1,6 @@
 import Navbar from '../comps/Navbar'
 import Footer from '../comps/Footer'
-import QuickNavbar from '../comps/quickNavbar'
+import QuickNavbar from '../comps/QuickNavbar'
 
 import Link from 'next/link'
 import Image from 'next/image'
