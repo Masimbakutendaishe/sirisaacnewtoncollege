@@ -1,6 +1,6 @@
 import Navbar from "./Navbar";
 import Footer from "./Footer";
-import QuickNavbar from "./quickNavbar";
+import QuickNavbar from "./QuickNavbar";
 
 const Layout=({children})=>{
     return(
