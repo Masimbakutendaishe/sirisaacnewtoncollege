@@ -1,6 +1,7 @@
 import Image from 'next/image';
 import { useState } from 'react';
-import { createClient } from 'contentful-management';
+import { db } from '../firebaseConfig'; // Import your Firebase configuration
+import { collection, addDoc } from 'firebase/firestore';
 
 const AdmissionsForm = () => {
   const [formData, setFormData] = useState({
@@ -13,9 +14,6 @@ const AdmissionsForm = () => {
     gender: '',
     previousSchool: '',
     additionalInfo: '',
-    birthCertificate: null,
-    reportCard: null,
-    otherDocuments: null,
   });
 
   const handleChange = (e) => {
@@ -23,87 +21,29 @@ const AdmissionsForm = () => {
     setFormData({ ...formData, [name]: value });
   };
 
-  const handleFileChange = (e) => {
-    const { name, files } = e.target;
-    // Update only the file input while preserving other fields
-    setFormData({ ...formData, [name]: files[0] });
-  };
-
   const handleSubmit = async (e) => {
     e.preventDefault();
-
-    // Create a Contentful client
-    const client = createClient({
-   
-      accessToken: process.env.NEXT_PUBLIC_CONTENTFUL_ACCESS_TOKEN,
-    });
-
     try {
-      // Create an entry in Contentful
-      const space = await client.getSpace('54xsg464qja8');
-      const environment = await space.getEnvironment('master'); // or your environment name
-      const entry = await environment.createEntry('admissionsForm', {
-        fields: {
-          name: { 'en-US': formData.name },
-          email: { 'en-US': formData.email },
-          phone: { 'en-US': formData.phone },
-          address: { 'en-US': formData.address },
-          grade: { 'en-US': formData.grade },
-          dateOfBirth: { 'en-US': formData.dob },
-          gender: { 'en-US': formData.gender },
-          previousSchool: { 'en-US': formData.previousSchool },
-          additionalInformation: { 'en-US': formData.additionalInfo }, // Correct field name
-        },
-      });
-
-      // Process and upload files if needed
-      if (formData.birthCertificate) {
-        const birthCertFile = await uploadFile(environment, formData.birthCertificate);
-        entry.fields.birthCertificate = { 'en-US': { sys: { type: 'File', id: birthCertFile.sys.id } } };
-      }
-
-      if (formData.reportCard) {
-        const reportCardFile = await uploadFile(environment, formData.reportCard);
-        entry.fields.reportCard = { 'en-US': { sys: { type: 'File', id: reportCardFile.sys.id } } };
-      }
-
-      if (formData.otherDocuments) {
-        const otherDocumentsFile = await uploadFile(environment, formData.otherDocuments);
-        entry.fields.otherDocuments = { 'en-US': { sys: { type: 'File', id: otherDocumentsFile.sys.id } } };
-      }
-
-      // Publish the entry
-      await entry.publish();
-      console.log('Form submitted:', entry);
+      // Add a new document to the "admissions" collection in Firestore
+      await addDoc(collection(db, 'admissions'), formData);
+      console.log('Form submitted:', formData);
       alert('Application submitted successfully!');
+      // Reset the form data after submission
+      setFormData({
+        name: '',
+        email: '',
+        phone: '',
+        address: '',
+        grade: '',
+        dob: '',
+        gender: '',
+        previousSchool: '',
+        additionalInfo: '',
+      });
     } catch (error) {
-      console.error('Error submitting form:', error);
-      alert('There was an error submitting your application. Please try again.');
+      console.error('Error adding document: ', error);
+      alert('Error submitting application. Please try again later.');
     }
-  };
-
-  const uploadFile = async (environment, file) => {
-    const upload = await environment.createUpload({
-      file: file,
-    });
-
-    await upload.processForAllLocales();
-    const asset = await environment.createAsset({
-      fields: {
-        title: { 'en-US': file.name },
-        file: {
-          'en-US': {
-            contentType: file.type,
-            fileName: file.name,
-            upload: { sys: { type: 'Link', id: upload.sys.id } },
-          },
-        },
-      },
-    });
-
-    await asset.processForAllLocales();
-    await asset.publish();
-    return asset;
   };
 
   return (
@@ -116,7 +56,7 @@ const AdmissionsForm = () => {
 
       {/* Admissions Form Section */}
       <div className="max-w-4xl mx-auto p-8">
-        <form onSubmit={handleSubmit} className="bg-blue-900 text-white rounded-lg shadow-lg p-6">
+        <form onSubmit={handleSubmit} className=" text-white rounded-lg shadow-lg p-6" style={{ backgroundColor: "hsla(32, 91%, 18%, 0.945)" }}>
           <h2 className="text-2xl font-bold mb-4">Fill Out the Form and Get Ready To Join Our College!</h2>
 
           {/* Form Fields */}
@@ -242,46 +182,7 @@ const AdmissionsForm = () => {
             ></textarea>
           </div>
 
-          {/* Document Upload Section */}
-          <div className="mb-4">
-            <label className="block text-white" htmlFor="birthCertificate">Upload Birth Certificate</label>
-            <input
-              type="file"
-              id="birthCertificate"
-              name="birthCertificate"
-              onChange={handleFileChange}
-              className="w-full border text-black border-gray-300 rounded"
-            />
-          </div>
-
-          <div className="mb-4">
-            <label className="block text-white" htmlFor="reportCard">Upload Report Card</label>
-            <input
-              type="file"
-              id="reportCard"
-              name="reportCard"
-              onChange={handleFileChange}
-              className="w-full border text-black border-gray-300 rounded"
-            />
-          </div>
-
-          <div className="mb-4">
-            <label className="block text-white" htmlFor="otherDocuments">Upload Other Documents</label>
-            <input
-              type="file"
-              id="otherDocuments"
-              name="otherDocuments"
-              onChange={handleFileChange}
-              className="w-full border text-black border-gray-300 rounded"
-            />
-          </div>
-
-          <button
-            type="submit"
-            className="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
-          >
-            Submit Application
-          </button>
+          <button type="submit" className="bg-white text-blue-900 font-bold px-4 py-2 rounded">Submit Application</button>
         </form>
       </div>
     </div>
