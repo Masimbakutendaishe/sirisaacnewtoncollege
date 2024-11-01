@@ -1,23 +1,18 @@
 import Image from 'next/image';
 import { useState } from 'react';
+import { db } from '../firebaseConfig'; // Import your Firebase configuration
+import { collection, addDoc } from 'firebase/firestore';
 
 const TransferForm = () => {
   const [formData, setFormData] = useState({
     name: '',
     email: '',
     phone: '',
-    address: '',
-    currentSchool: '',
-    grade: '',
-    dob: '',
-    gender: '',
-    transferReason: '',
+    fromLocation: '',
+    toLocation: '',
+    transferDate: '',
+    reason: '',
     additionalInfo: '',
-    documents: {
-      birthCertificate: null,
-      reportCard: null,
-      otherDocuments: null,
-    },
   });
 
   const handleChange = (e) => {
@@ -25,20 +20,28 @@ const TransferForm = () => {
     setFormData({ ...formData, [name]: value });
   };
 
-  const handleFileChange = (e, docType) => {
-    setFormData({
-      ...formData,
-      documents: {
-        ...formData.documents,
-        [docType]: e.target.files[0],
-      },
-    });
-  };
-
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    // Handle form submission logic here
-    console.log('Transfer form submitted:', formData);
+    try {
+      // Add a new document to the "transfers" collection in Firestore
+      await addDoc(collection(db, 'transfer'), formData);
+      console.log('Form submitted:', formData);
+      alert('Transfer form submitted successfully!');
+      // Reset the form data after submission
+      setFormData({
+        name: '',
+        email: '',
+        phone: '',
+        fromLocation: '',
+        toLocation: '',
+        transferDate: '',
+        reason: '',
+        additionalInfo: '',
+      });
+    } catch (error) {
+      console.error('Error adding document: ', error);
+      alert('Error submitting the transfer form. Please try again later.');
+    }
   };
 
   return (
@@ -51,101 +54,111 @@ const TransferForm = () => {
 
       {/* Transfer Form Section */}
       <div className="max-w-4xl mx-auto p-8">
-        <form onSubmit={handleSubmit} className="bg-blue-900 text-white rounded-lg shadow-lg p-6">
-          <h2 className="text-2xl font-bold mb-4">Fill Out the Form to Transfer to Our College!</h2>
+        <form onSubmit={handleSubmit} className="text-white rounded-lg shadow-lg p-6" style={{ backgroundColor: "hsla(32, 91%, 18%, 0.945)" }}>
+          <h2 className="text-2xl font-bold mb-4">Please Fill Out the Transfer Form</h2>
 
-          {/* Input Fields */}
-          {['name', 'email', 'phone', 'address', 'currentSchool', 'dob', 'gender', 'transferReason', 'additionalInfo'].map((field) => (
-            <div className="mb-4" key={field}>
-              <label className="block text-white" htmlFor={field}>
-                {field.charAt(0).toUpperCase() + field.slice(1).replace(/([A-Z])/g, ' $1')}
-              </label>
-              {field === 'address' || field === 'transferReason' || field === 'additionalInfo' ? (
-                <textarea
-                  id={field}
-                  name={field}
-                  value={formData[field]}
-                  onChange={handleChange}
-                  required
-                  className="w-full p-2 border text-black border-gray-300 rounded"
-                ></textarea>
-              ) : (
-                <input
-                  type={field === 'dob' ? 'date' : field === 'email' ? 'email' : field === 'phone' ? 'tel' : 'text'}
-                  id={field}
-                  name={field}
-                  value={formData[field]}
-                  onChange={handleChange}
-                  required
-                  className="w-full p-2 border text-black border-gray-300 rounded"
-                />
-              )}
-            </div>
-          ))}
-
+          {/* Form Fields */}
           <div className="mb-4">
-            <label className="block text-white" htmlFor="grade">Grade Applying For</label>
-            <select
-              id="grade"
-              name="grade"
-              value={formData.grade}
+            <label className="block text-white" htmlFor="name">Full Name</label>
+            <input
+              type="text"
+              id="name"
+              name="name"
+              value={formData.name}
               onChange={handleChange}
               required
-              className="w-full p-2 border border-gray-300 rounded"
-            >
-              <option value="">Select a grade</option>
-              <option value="1">Grade 1</option>
-              <option value="2">Grade 2</option>
-              <option value="3">Grade 3</option>
-              {/* Add more grades as needed */}
-            </select>
+              className="w-full p-2 border text-black border-gray-300 rounded"
+            />
           </div>
 
-          {/* Document Upload Section */}
           <div className="mb-4">
-            <label className="block text-white">Upload Required Documents</label>
-
-            <div className="mb-4">
-              <label className="block text-white" htmlFor="birthCertificate">Birth Certificate</label>
-              <input
-                type="file"
-                id="birthCertificate"
-                onChange={(e) => handleFileChange(e, 'birthCertificate')}
-                className="w-full border text-black border-gray-300 rounded p-2"
-                required
-              />
-            </div>
-
-            <div className="mb-4">
-              <label className="block text-white" htmlFor="reportCard">Report Card</label>
-              <input
-                type="file"
-                id="reportCard"
-                onChange={(e) => handleFileChange(e, 'reportCard')}
-                className="w-full border text-black border-gray-300 rounded p-2"
-                required
-              />
-            </div>
-
-            <div className="mb-4">
-              <label className="block text-white" htmlFor="otherDocuments">Other Documents</label>
-              <input
-                type="file"
-                id="otherDocuments"
-                onChange={(e) => handleFileChange(e, 'otherDocuments')}
-                className="w-full border text-black border-gray-300 rounded p-2"
-              />
-            </div>
-
-            <p className="text-gray-400 mt-2">Please upload your birth certificate and report card. Other documents are optional.</p>
+            <label className="block text-white" htmlFor="email">Email Address</label>
+            <input
+              type="email"
+              id="email"
+              name="email"
+              value={formData.email}
+              onChange={handleChange}
+              required
+              className="w-full p-2 border text-black border-gray-300 rounded"
+            />
           </div>
 
-          <button
-            type="submit"
-            className="mt-4 w-full bg-hsla(32, 91%, 18%, 0.945) text-blue-900 bg-white py-2 rounded-lg transition duration-300 ease-in-out hover:bg-blue-900 hover:text-white hover:text-hsla(32, 91%, 18%, 0.945) hover:border hover:border-hsla(32, 91%, 18%, 0.945)"
-          >
-            Submit Transfer Request
-          </button>
+          <div className="mb-4">
+            <label className="block text-white" htmlFor="phone">Phone Number</label>
+            <input
+              type="tel"
+              id="phone"
+              name="phone"
+              value={formData.phone}
+              onChange={handleChange}
+              required
+              className="w-full p-2 border text-black border-gray-300 rounded"
+            />
+          </div>
+
+          <div className="mb-4">
+            <label className="block text-white" htmlFor="fromLocation">From Location</label>
+            <input
+              type="text"
+              id="fromLocation"
+              name="fromLocation"
+              value={formData.fromLocation}
+              onChange={handleChange}
+              required
+              className="w-full p-2 border text-black border-gray-300 rounded"
+            />
+          </div>
+
+          <div className="mb-4">
+            <label className="block text-white" htmlFor="toLocation">To Location</label>
+            <input
+              type="text"
+              id="toLocation"
+              name="toLocation"
+              value={formData.toLocation}
+              onChange={handleChange}
+              required
+              className="w-full p-2 border text-black border-gray-300 rounded"
+            />
+          </div>
+
+          <div className="mb-4">
+            <label className="block text-white" htmlFor="transferDate">Transfer Date</label>
+            <input
+              type="date"
+              id="transferDate"
+              name="transferDate"
+              value={formData.transferDate}
+              onChange={handleChange}
+              required
+              className="w-full p-2 border text-black border-gray-300 rounded"
+            />
+          </div>
+
+          <div className="mb-4">
+            <label className="block text-white" htmlFor="reason">Reason for Transfer</label>
+            <textarea
+              id="reason"
+              name="reason"
+              value={formData.reason}
+              onChange={handleChange}
+              className="w-full p-2 border text-black border-gray-300 rounded"
+            ></textarea>
+          </div>
+
+          <div className="mb-4">
+            <label className="block text-white" htmlFor="additionalInfo">Additional Information</label>
+            <textarea
+              id="additionalInfo"
+              name="additionalInfo"
+              value={formData.additionalInfo}
+              onChange={handleChange}
+              className="w-full p-2 border text-black border-gray-300 rounded"
+            ></textarea>
+          </div>
+
+          <button type="submit" className="bg-white text-blue-900 font-bold px-4 py-2 rounded">Submit Transfer Form</button>
         </form>
       </div>
     </div>
