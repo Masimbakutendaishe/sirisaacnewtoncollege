@@ -25,7 +25,7 @@ const MedicalForm = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      // Add a new document to the "medicalForms" collection in Firestore
+      // Add a new document to the "medical" collection in Firestore
       await addDoc(collection(db, 'medical'), formData);
       console.log('Form submitted:', formData);
       alert('Medical form submitted successfully!');
