@@ -69,7 +69,7 @@ const Footer = () => {
 
             {/* Bottom Section */}
             <div className="bg-black text-white py-3 text-center">
-                <p>&copy; 2024 Sir Isaac Newton College. All rights reserved.</p>
+                <p>&copy; 2024 TEEM SHE for Sir Isaac Newton College. All rights reserved.</p>
                 <div className="mt-2 flex justify-center gap-4">
                     <a href="https://facebook.com" target="_blank" rel="noopener noreferrer"><img src="/fbicon.png" alt="Facebook" className="w-6 h-auto" /></a>
                     <a href="https://instagram.com" target="_blank" rel="noopener noreferrer"><img src="/igicon.png" alt="Instagram" className="w-6 h-auto" /></a>
