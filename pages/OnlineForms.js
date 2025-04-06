@@ -18,7 +18,7 @@ const OnlineForms = () => {
           <div className="relative h-48 w-full">
             <Image
               src="/images/image.jpg" // Replace with your image path
-              alt="Admission Form"
+              alt="The Admission Form"
               layout="fill"
               objectFit="cover"
               className="rounded-t-lg"
