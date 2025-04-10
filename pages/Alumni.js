@@ -12,7 +12,7 @@ const AlumniNetworkPage = () => {
 
       {/* Main Content */}
       <div className="max-w-6xl mx-auto p-8 space-y-12">
-        {/* Section 1: Join the Alumni Network */}
+        {/* Section 1: Join our Alumni Network */}
         <div className="grid md:grid-cols-2 gap-8">
           <div className="relative h-64 w-full rounded-lg overflow-hidden shadow-lg">
             <Image
