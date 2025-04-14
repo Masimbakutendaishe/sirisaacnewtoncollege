@@ -30,7 +30,7 @@ const EVENTS = () => {
           <div className="p-4">
             <h2 className="text-xl font-bold mb-2">Events At a Glance</h2>
             <p className="text-gray-700">
-              Get an overview of all the exciting events happening at our college...
+              Get an overview of all of the exciting events happening at our college...
             </p>
             <Link href="/calendar" legacyBehavior>
               <a
