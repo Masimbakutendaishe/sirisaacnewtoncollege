@@ -18,7 +18,7 @@ const CLUBS = () => {
           <div className="relative h-48 w-full">
             <Image
               src="/images/image3.jpg" // Replace with your image path
-              alt="Clubs At a Glance"
+              alt="the Clubs At a Glance"
               layout="fill"
               objectFit="cover"
               className="rounded-t-lg"
