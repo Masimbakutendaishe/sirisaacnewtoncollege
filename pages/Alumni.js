@@ -17,7 +17,7 @@ const AlumniNetworkPage = () => {
           <div className="relative h-64 w-full rounded-lg overflow-hidden shadow-lg">
             <Image
               src="/images/alumni2.jpg"
-              alt="Join Alumni Network"
+              alt="Join the  Alumni Network"
               layout="fill"
               objectFit="cover"
               className="rounded-lg"
