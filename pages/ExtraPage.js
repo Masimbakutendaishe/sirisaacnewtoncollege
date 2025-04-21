@@ -16,7 +16,7 @@ const GlimpseOfCollege = () => {
         <div className="relative bg-white rounded-lg shadow-lg overflow-hidden">
           <div className="relative h-48 w-full">
             <Image
-              src="/images/image2.jpg" // Replace with your relevant image path
+              src="/images/image3.jpg" // Replace with your relevant image path
               alt="Library"
               layout="fill"
               objectFit="cover"
