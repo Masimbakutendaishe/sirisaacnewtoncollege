@@ -16,7 +16,7 @@ const ABOUTUS = () => {
         <div className="relative bg-white rounded-lg shadow-lg overflow-hidden">
           <div className="relative h-48 w-full">
             <Image
-              src="/images/image.jpg" // Replace with your image path
+              src="/images/image.jpg" // one can replace with your image path
               alt="Our Facilities"
               layout="fill"
               objectFit="cover"
