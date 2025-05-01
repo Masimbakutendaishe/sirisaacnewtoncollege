@@ -47,7 +47,7 @@ const CLUBS = () => {
                   e.currentTarget.style.border = "none";
                 }}
               >
-                Read More
+                Read Some More
               </a>
             </Link>
           </div>
