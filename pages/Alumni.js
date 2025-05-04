@@ -10,7 +10,7 @@ const AlumniNetworkPage = () => {
         <h1 className="relative  text-left text-white text-5xl font-bold z-10 py-16">ALUMNI NETWORK</h1>
       </div>
 
-      {/* Main Content */}
+      {/* the Main Content */}
       <div className="max-w-6xl mx-auto p-8 space-y-12">
         {/* Section 1: Please Join our Alumni Network */}
         <div className="grid md:grid-cols-2 gap-8">
