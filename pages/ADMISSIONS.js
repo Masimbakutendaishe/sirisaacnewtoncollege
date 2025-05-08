@@ -4,7 +4,7 @@ import Image from 'next/image';
 const ADMISSIONS = () => {
   return (
     <div className="relative overflow-hidden">
-      {/* Background Image for the Heading */}
+      {/* The Background Image for the Heading */}
       <div className="relative h-48 w-full bg-cover bg-center" style={{ backgroundImage: "url('/images/image2.jpg')" }}>
         <div className="absolute inset-0 bg-black opacity-50"></div>
         <h1 className="relative text-left text-white text-5xl font-bold z-10 py-16">ADMISSIONS</h1>
