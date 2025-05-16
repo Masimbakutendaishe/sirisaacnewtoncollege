@@ -10,7 +10,7 @@ const CLUBS = () => {
         <h1 className="relative text-left text-white text-5xl font-bold z-10 py-16">CLUBS</h1>
       </div>
 
-      {/* Sections */}
+      {/* The Sections */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 p-8">
 
         {/* Clubs At Glance Section */}
