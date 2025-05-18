@@ -10,7 +10,7 @@ const EVENTS = () => {
         <h1 className="relative text-left text-white text-5xl font-bold z-10 py-16">EVENTS</h1>
       </div>
 
-      {/* Sections */}
+      {/* the Sections */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 p-8">
 
         {/* Events At a Glance Section */}
